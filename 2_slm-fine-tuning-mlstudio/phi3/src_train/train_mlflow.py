@@ -167,6 +167,13 @@ def main(args):
         remove_columns=column_names,
         desc="Applying chat template to train_sft",
     )
+    
+    print(f"Original train dataset size: {len(train_dataset)}")
+    print(f"Processed train dataset size: {len(processed_train_dataset)}")
+    print(f"Processed train dataset : {processed_train_dataset}")
+    print(f"Processed train dataset[0] : {processed_train_dataset[0]}")
+    print(f"Processed train dataset[1] : {processed_train_dataset[1]}")
+    print(f"tokenizer.chat_template : {tokenizer.chat_template}")
 
     processed_eval_dataset = eval_dataset.map(
         apply_chat_template,
@@ -175,6 +182,12 @@ def main(args):
         remove_columns=column_names,
         desc="Applying chat template to test_sft",
     )
+    
+    for example in processed_train_dataset:
+        input_ids = tokenizer(example["text"], truncation=True, max_length=args.max_seq_length)["input_ids"]
+        if len(input_ids) > args.max_seq_length:
+            print(f"Example too long and truncated: {example}")
+
     
     with mlflow.start_run() as run:     
         
@@ -193,7 +206,7 @@ def main(args):
             max_seq_length=args.max_seq_length,
             dataset_text_field="text",
             tokenizer=tokenizer,
-            packing=True,
+            # packing=True,
         )
 
         # Show current memory stats
