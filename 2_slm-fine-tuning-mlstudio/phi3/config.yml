@@ -13,7 +13,7 @@ train:
     azure_env_name: "llm-finetuning-2024-11-05" # Please modify to your AzureML env name
     azure_compute_cluster_name: "gpu-cluster-a100-<YOUR-NAME>" # Please modify to avoid conflict
     azure_compute_cluster_size: "Standard_NC24ads_A100_v4" # 1 x A100 (80GB)
-    epoch: 10
+    epoch: 5
     train_batch_size: 1
     eval_batch_size: 1
     model_dir: "./outputs"
